@@ -24,16 +24,22 @@ export default function ResourcesNav() {
                         e.stopPropagation()
                         const newResources = context.dataResources.filter((resourceElement)=>(resourceElement.id !== resource.id))
                         context.setDataResources(newResources)
-                        
+                        console.log("c:",clickResource,"index:",index);
                         if(clickResource === index)
                         {
+                            console.log("befor:",index);
                             let newIndex = index - 1;
                             if(newIndex < 0)
-                                newIndex = 0
+                            newIndex = 0
                                 context.setTabsResource(newResources[newIndex].tabs)
                                 context.setClickTabIndex(0)
                                 setClickResource(newIndex)
                                 context.setCurrentResource(newResources[newIndex].id) 
+                        }
+                        else
+                        {
+                            context.setClickTabIndex(0)
+                            setClickResource(index + 1)
                         }
                       }}>
                         <DeleteIcon className="w-8 h-8 p-2 rounded-full bg-gray-100 hover:bg-black hover:fill-white"/>

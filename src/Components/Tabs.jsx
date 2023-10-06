@@ -9,6 +9,7 @@ export default function Tabs({
   clickTabIndex,
   setClickTabIndex,
 }) {
+  const resourceContext = React.useContext(ResourcesContext);
   return (
     <TabsContext.Provider
       value={{
@@ -26,7 +27,24 @@ export default function Tabs({
               </Tab>
             ))}
           </TabList>
-          <button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              const newResources = resourceContext.dataResources.map(
+                (resource) => {
+                  if (resource.id === resourceContext.currentResource)
+                    resource.tabs.push({
+                      id: resource.tabs.length + 1,
+                      name: "Tab",
+                      link: "Link 180",
+                    });
+                  return resource;
+                }
+              );
+
+              resourceContext.setDataResources(newResources);
+            }}
+          >
             <PlusIcon className="w-6 h-6" />
           </button>
         </div>
@@ -67,7 +85,6 @@ function Tab({ children, tabsResource, tab }) {
         className="hover:scale-75"
         onClick={(e) => {
           e.stopPropagation();
-          console.log(resourceContext.currentResource);
 
           if (
             resourceContext.dataResources.find(
