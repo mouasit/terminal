@@ -21,7 +21,7 @@ export default function Tabs({
       }}
     >
       <div className=" w-full flex flex-col gap-4">
-        <div className="flex gap-2 items-center max-w-[31rem] md:max-w-[79rem] overflow-auto">
+        <div className="flex gap-2 items-center lg:max-w-[47rem]  2xl:max-w-[79rem] overflow-auto">
           <TabList>
             {tabsResource.map((tab, index) => (
               <Tab
