@@ -21,7 +21,7 @@ export default function Tabs({
           <TabList>
             {tabsResource.map((tab, index) => (
               <Tab key={index}>
-                {tab.name} <span className="font-bold">{tab.number}</span>
+                {tab.name} <span className="font-bold">0{index + 1}</span>
               </Tab>
             ))}
           </TabList>

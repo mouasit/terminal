@@ -18,9 +18,21 @@ export default function ResourcesNav() {
                         context.setClickTabIndex(0)
                         setClickResource(index)
                     }}>
-                      <span className="flex gap-1">{resource.name}<span className="font-bold">{resource.number}</span></span>
-                      <span className="rounded-full" onClick={()=>{
-                        console.log(55);
+                      <span className="flex gap-1">{resource.name}<span className="font-bold">0{index + 1}</span></span>
+                      <span className="rounded-full" onClick={(e)=>{
+                        e.stopPropagation()
+                        const newResources = context.dataResources.filter((resourceElement)=>(resourceElement.id !== resource.id))
+                        context.setDataResources(newResources)
+                        
+                        if(clickResource === index)
+                        {
+                            let newIndex = index - 1;
+                            if(newIndex < 0)
+                                newIndex = 0
+                                context.setTabsResource(newResources[newIndex].tabs)
+                                context.setClickTabIndex(0)
+                                setClickResource(newIndex)
+                        }
                       }}>
                         <DeleteIcon className="w-8 h-8 p-2 rounded-full bg-gray-100 hover:bg-black hover:fill-white"/>
                       </span>
