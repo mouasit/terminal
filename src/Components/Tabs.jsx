@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CloseIcon, PlusIcon } from "./Icons";
 import { ResourcesContext } from "../App";
 
@@ -10,6 +10,8 @@ export default function Tabs({
   setClickTabIndex,
 }) {
   const resourceContext = React.useContext(ResourcesContext);
+  const [addTab, setAddTab] = React.useState(false);
+
   return (
     <TabsContext.Provider
       value={{
@@ -19,10 +21,18 @@ export default function Tabs({
       }}
     >
       <div className=" w-full flex flex-col gap-4">
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center max-w-[31rem] md:max-w-[79rem] overflow-auto">
           <TabList>
             {tabsResource.map((tab, index) => (
-              <Tab key={index} tabsResource={tabsResource} tab={tab}>
+              <Tab
+                key={index}
+                tabsResource={tabsResource}
+                tab={tab}
+                addTab={
+                  addTab && index === tabsResource.length - 1 ? true : false
+                }
+                setAddTab={setAddTab}
+              >
                 {tab.name} <span className="font-bold">0{index + 1}</span>
               </Tab>
             ))}
@@ -36,13 +46,13 @@ export default function Tabs({
                     resource.tabs.push({
                       id: resource.tabs.length + 1,
                       name: "Tab",
-                      link: "Link 180",
+                      linkIframe: "Link 180",
                     });
                   return resource;
                 }
               );
-
               resourceContext.setDataResources(newResources);
+              setAddTab(true);
             }}
           >
             <PlusIcon className="w-6 h-6" />
@@ -62,22 +72,26 @@ export default function Tabs({
   );
 }
 
-function TabList({ children }) {
+export function TabList({ children }) {
   return <div className="flex gap-1">{children}</div>;
 }
 
-function Tab({ children, tabsResource, tab }) {
+function Tab({ children, tabsResource, tab, addTab, setAddTab }) {
   const context = React.useContext(TabsContext);
   const resourceContext = React.useContext(ResourcesContext);
   const index = context.numberOfchildren;
   context.numberOfchildren++;
+  useEffect(() => {
+    if (addTab) context.setClickTabIndex(tabsResource.length - 1);
+  }, [addTab,context,tabsResource.length]);
   return (
     <button
       className={`flex w-48 items-center justify-between shadow-sm border p-3 rounded-lg ${
-        context.clickTabIndex === index ? "bg-gray-200" : ""
+        context.clickTabIndex === index || addTab ? "bg-gray-200" : ""
       }`}
       onClick={() => {
         context.setClickTabIndex(index);
+        setAddTab(false)
       }}
     >
       <span>{children}</span>
@@ -108,7 +122,7 @@ function Tab({ children, tabsResource, tab }) {
               let newIndex = index - 1;
               if (newIndex < 0) newIndex = 0;
               context.setClickTabIndex(newIndex);
-            }
+            } else context.setClickTabIndex(0);
           }
         }}
       >
@@ -118,11 +132,11 @@ function Tab({ children, tabsResource, tab }) {
   );
 }
 
-function TabPanels({ children }) {
+export function TabPanels({ children }) {
   const context = React.useContext(TabsContext);
   return <>{children[context.clickTabIndex]}</>;
 }
 
-function TabPanel({ children }) {
+export function TabPanel({ children }) {
   return <>{children}</>;
 }
