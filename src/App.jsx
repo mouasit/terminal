@@ -49,7 +49,7 @@ function App() {
       ]
     },
     {
-      id:3,
+      id:2,
       name:"Resource",
       tabs:[
         {
@@ -68,15 +68,15 @@ function App() {
   ]
 
   const [dataResources,setDataResources] = React.useState(resourcesData)
-  console.log("dataResources",dataResources);
   const [tabsResource,setTabsResource] = React.useState(dataResources[0].tabs)
   const [clickTabIndex, setClickTabIndex] = React.useState(0);
+  const [currentResource,setCurrentResource] = React.useState(0)
   return(
     <main className='container mx-auto p-5 '>
       <section className='flex gap-8 '>
-        <ResourcesContext.Provider value={{dataResources:dataResources, setDataResources:setDataResources,setTabsResource:setTabsResource,setClickTabIndex:setClickTabIndex}}>
+        <ResourcesContext.Provider value={{dataResources:dataResources, setDataResources:setDataResources,setTabsResource:setTabsResource,setClickTabIndex:setClickTabIndex,currentResource:currentResource,setCurrentResource:setCurrentResource}}>
         <ResourcesNav />
-          <Tabs tabsResource={tabsResource} clickTabIndex={clickTabIndex} setClickTabIndex={setClickTabIndex}/>
+          <Tabs tabsResource={tabsResource} clickTabIndex={clickTabIndex} setClickTabIndex={setClickTabIndex} />
         </ResourcesContext.Provider>
       </section>
     </main>

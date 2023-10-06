@@ -1,5 +1,6 @@
 import React from "react";
 import { CloseIcon, PlusIcon } from "./Icons";
+import { ResourcesContext } from "../App";
 
 const TabsContext = React.createContext();
 
@@ -20,7 +21,7 @@ export default function Tabs({
         <div className="flex gap-2 items-center">
           <TabList>
             {tabsResource.map((tab, index) => (
-              <Tab key={index}>
+              <Tab key={index} tabsResource={tabsResource} tab={tab}>
                 {tab.name} <span className="font-bold">0{index + 1}</span>
               </Tab>
             ))}
@@ -47,8 +48,9 @@ function TabList({ children }) {
   return <div className="flex gap-1">{children}</div>;
 }
 
-function Tab({ children }) {
+function Tab({ children, tabsResource, tab }) {
   const context = React.useContext(TabsContext);
+  const resourceContext = React.useContext(ResourcesContext);
   const index = context.numberOfchildren;
   context.numberOfchildren++;
   return (
@@ -61,7 +63,38 @@ function Tab({ children }) {
       }}
     >
       <span>{children}</span>
-      <span>
+      <span
+        className="hover:scale-75"
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log(resourceContext.currentResource);
+
+          if (
+            resourceContext.dataResources.find(
+              (resource) => resource.id === resourceContext.currentResource
+            ).tabs.length > 1
+          ) {
+            const newTabs = tabsResource.filter(
+              (tabElement) => tabElement.id !== tab.id
+            );
+            const newResources = resourceContext.dataResources.map(
+              (resource) => {
+                if (resource.id === resourceContext.currentResource)
+                  resource.tabs = newTabs;
+                return resource;
+              }
+            );
+            resourceContext.setDataResources(newResources);
+            resourceContext.setTabsResource(newTabs);
+
+            if (context.clickTabIndex === index) {
+              let newIndex = index - 1;
+              if (newIndex < 0) newIndex = 0;
+              context.setClickTabIndex(newIndex);
+            }
+          }
+        }}
+      >
         <CloseIcon className="w-5 h-5 p-1 rounded-full bg-gray-100" />
       </span>
     </button>
