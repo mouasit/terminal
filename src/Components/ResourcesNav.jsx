@@ -2,7 +2,7 @@ import React from "react";
 import { DeleteIcon } from "./Icons";
 import { ResourcesContext } from "../App";
 
-export default function ResourcesNav() {
+export default function ResourcesNav({ setOpenModal }) {
   const context = React.useContext(ResourcesContext);
   const [clickResource, setClickResource] = React.useState(0);
   return (
@@ -11,7 +11,12 @@ export default function ResourcesNav() {
       <nav className="w-48">
         <ul className="flex flex-col gap-5">
           <li>
-            <button className="flex w-full  bg-black text-white items-center justify-center gap-2 shadow-sm border p-3 rounded-lg">
+            <button
+              className="flex w-full  bg-black text-white items-center justify-center gap-2 shadow-sm border p-3 rounded-lg"
+              onClick={() => {
+                setOpenModal(true);
+              }}
+            >
               <svg
                 version="1.1"
                 x="0"
