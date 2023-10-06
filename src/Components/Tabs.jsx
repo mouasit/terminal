@@ -3,8 +3,11 @@ import { CloseIcon, PlusIcon } from "./Icons";
 
 const TabsContext = React.createContext();
 
-export default function Tabs() {
-  const [clickTabIndex, setClickTabIndex] = React.useState(0);
+export default function Tabs({
+  tabsResource,
+  clickTabIndex,
+  setClickTabIndex,
+}) {
   return (
     <TabsContext.Provider
       value={{
@@ -16,36 +19,24 @@ export default function Tabs() {
       <div className=" w-full flex flex-col gap-4">
         <div className="flex gap-2 items-center">
           <TabList>
-            <Tab>
-              Tab <span className="font-bold">01</span>
-            </Tab>
-            <Tab>
-              Tab <span className="font-bold">02</span>
-            </Tab>
-            <Tab>
-              Tab <span className="font-bold">03</span>
-            </Tab>
+            {tabsResource.map((tab, index) => (
+              <Tab key={index}>
+                {tab.name} <span className="font-bold">{tab.number}</span>
+              </Tab>
+            ))}
           </TabList>
           <button>
             <PlusIcon className="w-6 h-6" />
           </button>
         </div>
         <TabPanels>
-          <TabPanel>
-            <div className="bg-black rounded-md h-[30rem] text-white p-2">
-              /c/Users/mustapha --- 1 ~
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="bg-black rounded-md h-[30rem] text-white p-2">
-              /c/Users/mustapha --- 2 ~
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="bg-black rounded-md h-[30rem] text-white p-2">
-              /c/Users/mustapha --- 3 ~
-            </div>
-          </TabPanel>
+          {tabsResource.map((tab, index) => (
+            <TabPanel key={index}>
+              <div className="bg-black rounded-md h-[30rem] text-white p-2">
+                /c/Users/mustapha --- {tab.linkIframe} ~
+              </div>
+            </TabPanel>
+          ))}
         </TabPanels>
       </div>
     </TabsContext.Provider>
