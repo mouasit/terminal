@@ -22,7 +22,7 @@ export default function Tabs({
     >
       <div className=" w-full flex flex-col gap-4">
         <div className="flex gap-2 items-center lg:max-w-[47rem]  2xl:max-w-[79rem] overflow-auto">
-          <TabList>
+          <TabList> 
             {tabsResource.map((tab, index) => (
               <Tab
                 key={index}
@@ -45,13 +45,14 @@ export default function Tabs({
                   if (resource.id === resourceContext.currentResource)
                     resource.tabs.push({
                       id: resource.tabs.length + 1,
-                      name: "Tab",
-                      linkIframe: "Link 180",
+                      name: "Terminal",
+                      linkIframe: resource.linkIframe,
                     });
                   return resource;
                 }
               );
               resourceContext.setDataResources(newResources);
+              localStorage.setItem('dataResources', JSON.stringify(newResources));
               setAddTab(true);
             }}
           >
@@ -62,7 +63,8 @@ export default function Tabs({
           {tabsResource.map((tab, index) => (
             <TabPanel key={index}>
               <div className="bg-black rounded-md h-[30rem] text-white p-2">
-                /c/Users/mustapha --- {tab.linkIframe} ~
+                {/* // /c/Users/mustapha --- {tab.linkIframe} ~ */}
+              <iframe className="h-full w-full" src={tab.linkIframe} frameborder="0" title="6587"></iframe>
               </div>
             </TabPanel>
           ))}

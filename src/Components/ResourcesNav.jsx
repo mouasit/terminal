@@ -5,6 +5,18 @@ import { ResourcesContext } from "../App";
 export default function ResourcesNav({ setOpenModal }) {
   const context = React.useContext(ResourcesContext);
   const [clickResource, setClickResource] = React.useState(0);
+  const {
+    dataResources,
+    setDataResources,
+    setTabsResource,
+    setClickTabIndex,
+    currentResource,
+    addItem,
+    removeItem,
+    setCurrentResource,
+  } = context;
+
+
   return (
     <div className="flex flex-col gap-4 ">
       <h1 className="text-lg font-bold">List of resources</h1>
@@ -15,6 +27,18 @@ export default function ResourcesNav({ setOpenModal }) {
               className="flex w-full  bg-black text-white items-center justify-center gap-2 shadow-sm border p-3 rounded-lg"
               onClick={() => {
                 setOpenModal(true);
+                // setDataResources((old) => [...old, {
+                //   id:dataResources.length + 1,
+                //   name:'test',
+                //   linkIframe:"http://localhost:8096/?hostname=simlab-cluster.um6p.ma&username=abdellah.elazraoui&password=MTIzNDU2QCE=",
+                //   tabs: [
+                //     {
+                //       id: 0,
+                //       name: "hello",
+                //       linkIframe: "http://localhost:8096/?hostname=simlab-cluster.um6p.ma&username=abdellah.elazraoui&password=MTIzNDU2QCE=",
+                //     },
+                //   ],
+                // }])
               }}
             >
               <svg
@@ -36,51 +60,61 @@ export default function ResourcesNav({ setOpenModal }) {
               Add Resource
             </button>
           </li>
-          {context.dataResources.map((resource, index) => (
-            <li key={index}>
+          <div className=" h-[500px] w-full overflow-y-auto"> 
+
+          
+          {dataResources.map((resource, index) => (
+            <li className=" mt-1"  key={index}>
               <button
-                className={`flex w-full items-center justify-between shadow-sm border p-3 rounded-lg ${
-                  clickResource === index ? "bg-gray-200" : ""
-                }`}
+                className={`flex w-full items-center justify-between shadow-sm border p-3 rounded-lg ${clickResource === index ? "bg-gray-200" : ""
+                  }`}
                 onClick={() => {
-                  context.setTabsResource(resource.tabs);
-                  context.setClickTabIndex(0);
+                  setTabsResource(resource.tabs);
+                  setClickTabIndex(0);
                   setClickResource(index);
-                  context.setCurrentResource(resource.id);
+                  setCurrentResource(resource.id);
                 }}
               >
                 <span className="flex gap-1">
                   {resource.name}
                   <span className="font-bold">0{index + 1}</span>
                 </span>
-                <span
-                  className="rounded-full"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const newResources = context.dataResources.filter(
-                      (resourceElement) => resourceElement.id !== resource.id
-                    );
-                    context.setDataResources(newResources);
-                    if (clickResource === index) {
-                      let newIndex = index - 1;
-                      if (newIndex < 0) newIndex = 0;
-                      context.setTabsResource(newResources[newIndex].tabs);
-                      context.setClickTabIndex(0);
-                      setClickResource(newIndex);
-                      context.setCurrentResource(newResources[newIndex].id);
-                    } else {
-                      context.setTabsResource(newResources[0].tabs);
-                      context.setClickTabIndex(0);
-                      setClickResource(0);
-                      context.setCurrentResource(newResources[0].id);
-                    }
-                  }}
-                >
-                  <DeleteIcon className="w-8 h-8 p-2 rounded-full bg-gray-100 hover:bg-black hover:fill-white" />
-                </span>
+
+                {
+                  (dataResources.length > 1) ?
+                    <span
+                      className="rounded-full"
+                      onClick={(e) => {
+                        console.log(resource);
+                       removeItem(resource.id);
+                        // const newResources = dataResources.filter(
+                        //   (resourceElement) => resourceElement.id !== resource.id
+                        // );
+                        // setDataResources(newResources);
+                        // if (clickResource === index) {
+                        //   let newIndex = index - 1;
+                        //   if (newIndex < 0) newIndex = 0;
+                        //   console.log('newIndex = ',newIndex);
+                        //   setTabsResource(newResources[newIndex].tabs);
+                        //   setClickTabIndex(0);
+                        //   setClickResource(newIndex);
+                        //   setCurrentResource(newResources[newIndex].id);
+                        // } else {
+                        //   setTabsResource(newResources[0].tabs);
+                        //   setClickTabIndex(0);
+                        //   setClickResource(0);
+                        //   setCurrentResource(newResources[0].id);
+                        // }
+                        e.stopPropagation();
+                      }}
+                    >
+                      <DeleteIcon className="w-8 h-8 p-2 rounded-full bg-gray-100 hover:bg-black hover:fill-white" />
+                    </span>
+                    : ''}
               </button>
             </li>
           ))}
+          </div>
         </ul>
       </nav>
     </div>
